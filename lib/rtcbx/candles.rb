@@ -17,9 +17,15 @@ class RTCBX
     attr_reader :bucket_lock
 
 
+
     def initialize(options = {}, &block)
       super(options, &block)
       @buckets_lock = Mutex.new
+      @candle_callbacks = []
+    end
+
+    def on_candle(&block)
+      @candle_callbacks << block if block_given?
     end
 
     def start!
@@ -77,7 +83,7 @@ class RTCBX
                 @candles << candle
                 # Run candle callback
                 #
-                @message_callbacks.each{|c| c.call(candle)}
+                @candle_callbacks.each{|c| c.call(candle) unless c.nil?}
                 buckets.delete(key)
               end
             end
