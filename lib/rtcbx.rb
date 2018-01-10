@@ -66,11 +66,13 @@ class RTCBX
       api_key,
       api_secret,
       api_passphrase,
-      product_id: product_id
+      product_id: product_id,
+      api_url: "https://api-public.sandbox.gdax.com"
     )
     @websocket = Coinbase::Exchange::Websocket.new(
       keepalive: true,
-      product_id: product_id
+      product_id: product_id,
+      api_url: "wss://ws-feed-public.sandbox.gdax.com"
     )
     @queue = Queue.new
     start! if start
